@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1>Commodities!!</h1>
+    <p class="lead">This is the Commodities display prototype!</p>
+    <p><a href="https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalCompressed/index.htm" class="btn btn-primary btn-large">Historical Compressed Data &raquo;</a></p>
+</div>
+
+<!-- CSS to style the dropdown -->
+<style>
+    /* Increase the font size and padding of the dropdown */
+    select#commodity-dropdown {
+        font-size: 24px; /* Adjust the font size as needed */
+        padding: 10px; /* Adjust the padding as needed */
+        width: 200px; /* Adjust the width as needed */
+    }
+</style>
+
+<!-- Initialize dropdown options -->
+<select id="commodity-dropdown">
+    {% for key in keys %}
+    <option value="{{ key }}">{{ key }}</option>
+    {% endfor %}
+</select>
+
+<!-- Graph container -->
+<div id="graph-container" style="height: 100vh"></div>
+
+<!-- JavaScript to handle dropdown change and update the graph -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<!-- JavaScript to handle dropdown change and update the graph -->
+<script>
+// Function to update the graph based on selected commodity
+    function updateGraph(selectedCommodity) {
+        $.ajax({
+            type: 'POST',
+            url: '/get_graph',
+            data: { commodity: selectedCommodity },
+            success: function (response) {
+                var graphData = JSON.parse(response);
+                Plotly.react('graph-container', graphData.data, graphData.layout);
+            },
+            error: function (xhr, status, error) {
+                var errorMessage = xhr.responseJSON.error;
+                var stackTrace = xhr.responseJSON.stack_trace;
+                console.error('Error:', errorMessage);
+                console.error('Stack Trace:', stackTrace);
+            }
+        });
+}
+
+// Event listener for dropdown change
+document.getElementById('commodity-dropdown').addEventListener('change', function () {
+    var selectedCommodity = this.value;
+    updateGraph(selectedCommodity);
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    updateGraph('{{ keys[0] }}');
+});
+</script>
+
+{% endblock %}

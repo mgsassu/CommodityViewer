@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34408.163
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "CommodityViewer", "CommodityViewer\CommodityViewer.pyproj", "{27C44EB4-0970-4FC1-8C1A-A142227D5845}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{27C44EB4-0970-4FC1-8C1A-A142227D5845}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27C44EB4-0970-4FC1-8C1A-A142227D5845}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27C44EB4-0970-4FC1-8C1A-A142227D5845}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27C44EB4-0970-4FC1-8C1A-A142227D5845}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E7F2D300-C80C-4CDC-98E7-C880F16FB033}
+	EndGlobalSection
+EndGlobal

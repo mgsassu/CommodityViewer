@@ -3,6 +3,13 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# Environment and Output Files
+commodity_env/
+flask_env/
+OutputFiles/
+OutputFiles_Reduced/
+DataFiles/
+
 # User-specific files
 *.rsuser
 *.suo
