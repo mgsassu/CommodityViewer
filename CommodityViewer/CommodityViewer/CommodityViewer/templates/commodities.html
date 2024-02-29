@@ -1,21 +1,28 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="jumbotron">
-    <h1>Commodities!!</h1>
-    <p class="lead">This is the Commodities display prototype!</p>
-    <p><a href="https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalCompressed/index.htm" class="btn btn-primary btn-large">Historical Compressed Data &raquo;</a></p>
-</div>
 
 <!-- CSS to style the dropdown -->
 <style>
     /* Increase the font size and padding of the dropdown */
     select#commodity-dropdown {
-        font-size: 24px; /* Adjust the font size as needed */
-        padding: 10px; /* Adjust the padding as needed */
-        width: 200px; /* Adjust the width as needed */
+        font-size: 16px;
+        padding: 10px;
+        width: 200px; 
     }
 </style>
+
+<div class="jumbotron">
+    <h1>Commodity Viewer</h1>
+    <p>
+        This page displays the historical net (long minus short) positions of different traders in the food commodities market.
+        These include Producer/Merchant/Processor/User, Swap Dealers, Managed Money, Other Reportables, and Nonreportable Positions.
+        Not included are metals or energy commodities.
+    </p>
+    <p>The default commodity is Cotton, and other commodities can be viewed using the dropdown. The currently displayed commodity, plus the most recent data date, is included in the title of the graph.</p>
+    <p>The data source is linked below, but all data is processed, compiled, and stored separately prior to display in the below graph.</p>
+    <p><a href="https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalCompressed/index.htm" class="btn btn-primary btn-large" id="cftclink-button">Historical Compressed Data &raquo;</a></p>
+</div>
 
 <!-- Initialize dropdown options -->
 <select id="commodity-dropdown">

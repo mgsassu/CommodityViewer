@@ -25,36 +25,37 @@ REGION = 'us-west-2'
 DATABASE = 'commdatabase'
 S3_OUTPUT = 's3://s3bucket-comm/queries/'
 
+
+# @application.route('/home')
+# def home():
+#     """Renders the home page."""
+#     return render_template(
+#         'index.html',
+#         title='Home Page',
+#         year=datetime.now().year,
+#     )
+
+# @application.route('/contact')
+# def contact():
+#     """Renders the contact page."""
+#     return render_template(
+#         'contact.html',
+#         title='Contact',
+#         year=datetime.now().year,
+#         message='Your contact page.'
+#     )
+
+# @application.route('/about')
+# def about():
+#     """Renders the about page."""
+#     return render_template(
+#         'about.html',
+#         title='About',
+#         year=datetime.now().year,
+#         message='Your application description page.'
+#     )
+
 @application.route('/')
-@application.route('/home')
-def home():
-    """Renders the home page."""
-    return render_template(
-        'index.html',
-        title='Home Page',
-        year=datetime.now().year,
-    )
-
-@application.route('/contact')
-def contact():
-    """Renders the contact page."""
-    return render_template(
-        'contact.html',
-        title='Contact',
-        year=datetime.now().year,
-        message='Your contact page.'
-    )
-
-@application.route('/about')
-def about():
-    """Renders the about page."""
-    return render_template(
-        'about.html',
-        title='About',
-        year=datetime.now().year,
-        message='Your application description page.'
-    )
-
 @application.route('/commodities')
 def commodities():
     try:
@@ -201,8 +202,8 @@ def get_graph():
 
         # Create the figure
         fig = px.line(df, x = 'date', y = df.columns[1:], hover_data={"date": "|%B %d, %Y"}, title = f"{commodity}: Most recent data from {str(df['date'].iloc[-1].date())}", markers=True)
-        fig.update_layout(font=dict(size=32))
-        fig.update_layout(hoverlabel=dict(font_size=20))
+        fig.update_layout(font=dict(size=20))
+        fig.update_layout(hoverlabel=dict(font_size=16))
 
         # Create graphJSON
         graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
