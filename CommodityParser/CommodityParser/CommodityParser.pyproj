@@ -22,6 +22,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CommoditiesDict.py" />
     <Compile Include="Step2_LoadCsvsToS3Hive.py" />
     <Compile Include="Step1_CreateExcelAndCsvFiles.py" />
     <Compile Include="PlotlyVisualizations.py" />
