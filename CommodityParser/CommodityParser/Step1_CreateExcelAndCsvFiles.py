@@ -29,24 +29,24 @@ def main():
         print(f"Reading in {file}...")
         df_cftc = pd.read_excel(file)
         # Loop through each of our commodity keys
-        for key in commodities_dict.keys():
-            print(f"Processing {file} - {key}")
+        for commodity in commodities_dict.keys():
+            print(f"Processing {file} - {commodity}")
             # Parse the cftc df into the value associated with each key. Note that there may be more than 1 value that we need to parse and append
-            for i in range(0, len(commodities_dict[key])):
+            for i in range(0, len(commodities_dict[commodity])):
                 # Do the parsing
-                df_temp = df_cftc[df_cftc["Market_and_Exchange_Names"] == commodities_dict[key][i]]
+                df_temp = df_cftc[df_cftc["Market_and_Exchange_Names"] == commodities_dict[commodity][i]]
                 # If we don't have any data, just continue
                 if len(df_temp) == 0:
                     continue
                 # Concat, or make a new dataframe if there isn't one, or this is our first loop
-                if key in final_dict.keys():
-                    final_dict[key] = pd.concat([final_dict[key], df_temp])
+                if commodity in final_dict.keys():
+                    final_dict[commodity] = pd.concat([final_dict[commodity], df_temp])
                 else:
-                     final_dict[key] = df_temp.copy()
+                     final_dict[commodity] = df_temp.copy()
                      
     # loop through the final dict. Create new columns and export
-    for key in final_dict.keys():
-        df = final_dict[key]
+    for commodity in final_dict.keys():
+        df = final_dict[commodity]
         df['Prod_Net'] = df.apply(lambda row: row['Prod_Merc_Positions_Long_ALL'] - row['Prod_Merc_Positions_Short_ALL'], axis=1)
         df['Swap_Net'] = df.apply(lambda row: row['Swap_Positions_Long_All'] - row['Swap__Positions_Short_All'], axis=1)
         df['MM_Net'] = df.apply(lambda row: row['M_Money_Positions_Long_ALL'] - row['M_Money_Positions_Short_ALL'], axis=1)
@@ -59,8 +59,8 @@ def main():
         # Make a new dataframe of just the desired columns. Apparently filter makes a new copy in memory, so we're using that one. 
         df_filtered = df.filter(['Date','Prod_Net','Swap_Net','MM_Net','Other_Reportable_Net','Non_Reportable_Net'])
 
-        df_filtered.to_excel(f"./OutputFiles_Reduced/{key}.xlsx", index=False)
-        df_filtered.to_csv(f"./OutputFiles_Reduced/{key}.csv", index=False)
+        df_filtered.to_excel(f"./OutputFiles_Reduced/{commodity}.xlsx", index=False)
+        df_filtered.to_csv(f"./OutputFiles_Reduced/{commodity}.csv", index=False)
 
 
 if __name__ == "__main__":

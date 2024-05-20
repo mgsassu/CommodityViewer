@@ -6,9 +6,11 @@ import sys
 import os
 import numpy as np
 import glob
+import json
 
 import openpyxl
 import plotly.express as px
+import plotly.utils as pu
 
 def main():
     # Timestamp for file output
@@ -26,23 +28,30 @@ def main():
     commodities = []
     for filepath in files:
         df = pd.read_excel(filepath)
-        df['Date'] = pd.to_datetime(df['Report_Date_as_MM_DD_YYYY'])
-        df = df.sort_values(by='Report_Date_as_MM_DD_YYYY')
+        
         
         filex = os.path.basename(filepath)
         commodity = filex.split('.')[0]
-        
         data[commodity] = df.to_dict(orient='records')
         commodities.append(commodity)
 
-        fig = px.line(df, x = 'Date', y = df.columns[1:], title = f"{commodity} {dt_now_str}", markers=True)
-
+        # Create the figure
+        fig = px.line(df, x = 'Date', y = df.columns[1:], hover_data={"Date": "|%B %d, %Y"}, title = f"{commodity}: Most recent data from {str(df['Date'].iloc[-1].date())}", markers=True)
+        fig.update_layout(font=dict(size=20))
+        fig.update_layout(hoverlabel=dict(font_size=16))
+        
         ### Save to html
-        fig.write_html(f"./OutputFiles_Reduced/{commodity} {dt_now_str}.html")
+        # fig.write_html(f"./OutputFiles_Reduced/{commodity} {dt_now_str}.html")
 
         ## Save to image
         #fig.write_image(f"./OutputFiles_Reduced/{commodity} {dt_now_str}.png", height=1500, width=2100)
 
+        # Create graphJSON and save
+        # graphJSON = json.dumps(fig, cls=pu.PlotlyJSONEncoder)
+        jsonFileName = f"./OutputFiles_Reduced/{commodity} {dt_now_str}.json"
+        with open(jsonFileName, 'w', encoding='utf-8') as f:
+            f.write(json.dumps(fig, cls=pu.PlotlyJSONEncoder))
+        print(f"Finished writing {jsonFileName}. Continuing...")
 
     print("Program Execution Complete.")
 

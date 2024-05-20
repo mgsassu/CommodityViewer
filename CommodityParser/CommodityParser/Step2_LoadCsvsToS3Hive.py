@@ -3,9 +3,13 @@ import numpy as np
 import datetime as dt
 import glob
 import os
+import json
 
 import boto3
 from io import BytesIO
+
+import plotly.express as px
+import plotly.utils as pu
 
 def main():
     # Current time
@@ -17,39 +21,40 @@ def main():
     
     # Setup AWS clients and locations
     s3_client = boto3.client('s3')
-    s3_bucket = 's3bucket-comm'
+    s3_bucket = 's3bucket-comm-json'
     
     # Get all files
-    path = "./OutputFiles_Reduced/*.csv"
+    path = "./OutputFiles_Reduced/*.xlsx"
     files = glob.glob(path)
     
     # Loop through files, append to the appropriate pandas dataframe
     for file in files:
         # Get the filename, will be used to make a new S3 folder
         filex = os.path.basename(file)
-        key = filex.split('.')[0]
+        commodity = filex.split('.')[0]
         
         # read in the file
         print(f"Reading in {file}...")
-        df = pd.read_csv(file, index_col=False)
+        df = pd.read_excel(file, index_col=False)
+        
+        # Create the figure
+        fig = px.line(df, x = 'Date', y = df.columns[1:], hover_data={"Date": "|%B %d, %Y"}, title = f"{commodity}: Most recent data from {str(df['Date'].iloc[-1].date())}", markers=True)
+        fig.update_layout(font=dict(size=20))
+        fig.update_layout(hoverlabel=dict(font_size=16))
         
         ### Now upload the dataset ######################
         # Create a path for the data. NOTE: The text "commodity=key" is required for the Hive format in S3, which allows the data to be queried by Athena. 
-        path = f'commodities/commodity={key}/data.parquet'
+        path = f'commodities/{commodity}.json'
 
-        # Convert the data to Parquet (in-memory)
-        parquet_buffer = BytesIO()
-        df.to_parquet(parquet_buffer)
-
-        # Upload the Parquet data to S3
+        # Upload the json data to S3
         s3_client.put_object(
             Bucket=s3_bucket,
             Key=path,
-            Body=parquet_buffer.getvalue()
+            Body=json.dumps(fig, cls=pu.PlotlyJSONEncoder)
         )
 
         # Print confirmation message
-        print(f"File '{key}' loaded successfully.")
+        print(f"File '{commodity}' loaded successfully.")
 
 
 if __name__ == "__main__":
